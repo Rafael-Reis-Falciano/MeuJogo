@@ -5,11 +5,15 @@ var engine, world;
 
 var fundo;
 var player;
-var parede1, parede2, solo;
+var paredeEsquerda, paredeDireita, solo;
+var colidiu = false;
+var right = 0;
+var left = 1;
+var direcaoPulo = right;
 
 function preload()
 {
-
+ fundo = loadImage("imagem fundo.jpg");
 }
 
 function setup()
@@ -28,10 +32,10 @@ function setup()
     frictionAir: 0.05, 
   }
 
-  parede1 = Bodies.rectangle(0, 0, 50, 1000, static_options);
-  parede2 = Bodies.rectangle(350, 0, 50, 1000, static_options);
-  World.add(world, parede1);
-  World.add(world, parede2);
+  paredeEsquerda = Bodies.rectangle(0, 0, 50, 1000, static_options);
+  paredeDireita = Bodies.rectangle(350, 0, 50, 1000, static_options);
+  World.add(world, paredeEsquerda);
+  World.add(world, paredeDireita);
 
   solo = Bodies.rectangle(0, 580, 400, 1, static_options);
   World.add(world, solo);
@@ -46,37 +50,58 @@ function draw()
   background("gray");
   Engine.update(engine);
 
+  image(fundo, 0, 0, width, height);
+
   fill("red");
   rect(player.position.x, player.position.y, 30, 40);
-  rect(parede1.position.x, parede1.position.y, 50, 600);
-  rect(parede2.position.x, parede2.position.y, 50, 600);
+  /*rect(paredeEsquerda.position.x, paredeEsquerda.position.y, 50, 600);
+  rect(paredeDireita.position.x, paredeDireita.position.y, 50, 600);*/
 
+  colisao(paredeEsquerda);
+  colisao(paredeDireita);
   movimentacao();
-  colisao(parede1);
-  colisao(parede2);
 }
 
 function movimentacao()
 {
-  if(keyDown("space"))
+  if(keyDown("space") && direcaoPulo === right)
   {
-    Matter.Body.setVelocity(player, {x: 15, y: -15});
+    Matter.Body.setVelocity(player, {x: 20, y: -10});
+  }
+
+  if(keyDown("space") && direcaoPulo === left)
+  {
+    Matter.Body.setVelocity(player, {x: -20, y: -10});
   }
 }
 
 function colisao(p)
 {
   var colidir = Matter.SAT.collides(player, p);
-
+  
   if(colidir.collided)
   {
-    Matter.Body.setStatic(player, true);
+    //Matter.Body.setStatic(player, true);
+    colidiu = true;
 
-    setTimeout(() => {
-      Matter.Body.setStatic(player, false);
-      Matter.Body.setVelocity(player, {x: 0, y:5});
-    }, 1000)
+    if(colidiu = true){
+      //Matter.Body.setStatic(player, false);
+      Matter.Body.setVelocity(player, {x: 0, y: -0.2});
+      setTimeout(() => {
+        Matter.Body.setVelocity(player, {x: 0, y: 2})
+      }, 2500)
+    }
+
+    if(p === paredeEsquerda)
+    {
+      direcaoPulo = right;
+    }
+    if(p === paredeDireita)
+    {
+      direcaoPulo = left;
+    }
   }
+
 }
 
 
