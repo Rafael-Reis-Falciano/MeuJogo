@@ -11,15 +11,23 @@ var right = 0;
 var left = 1;
 var direcaoPulo = right;
 var personagem1, personagem2, personagem3, personagem4, personagem5;
+var parametroImg = "inicio";
+var sawObstacle, laserObstacle, spikesObstacleE, spikesObstacleD;
+var obstaculoSpikesE;
+var espinhos = [200, 400];
 
 function preload()
 {
- fundo = loadImage("imagem fundo.jpg");
+ fundo = loadImage("imagemFundo.jpg");
  personagemComeco = loadImage("sprite_0.png");
  personagemPulandoDireita = loadImage("sprite_1.png");
  personagemPulandoEsquerda = loadImage("sprite_2.png");
  personagemParedeDireita = loadImage("sprite_3.png");
  personagemParedeEsquerda = loadImage("sprite_4.png");
+ sawObstacle = loadImage("SawObstacle.png");
+ laserObstacle = loadImage("LaserObstacle.png");
+ spikesObstacleE = loadImage("SpikesObstacle.png");
+ spikesObstacleD = loadImage("SpikesObstacle2.png");
 }
 
 function setup()
@@ -39,7 +47,7 @@ function setup()
   }
 
   paredeEsquerda = Bodies.rectangle(0, 0, 30, 1000, static_options);
-  paredeDireita = Bodies.rectangle(350, 0, 30, 1000, static_options);
+  paredeDireita = Bodies.rectangle(370, 0, 30, 1000, static_options);
   World.add(world, paredeEsquerda);
   World.add(world, paredeDireita);
 
@@ -49,6 +57,8 @@ function setup()
   player = Bodies.rectangle(185, 70, 50, 50, player_options);
   World.add(world, player);
 
+  obstaculoSpikesE = new Obstacles(40, Math.round(random(espinhos)), 25, 100, spikesObstacleE);
+
 }
 
 function draw()
@@ -56,18 +66,29 @@ function draw()
   background("gray");
   Engine.update(engine);
 
-  //image(fundo, 0, 0, width, height);
+  push();
+  imageMode(CENTER)
+  image(fundo, 200, 300, 562, height);
+  pop();
 
   if(player.position.y > 550)
   {
-  image(personagemComeco, player.position.x, player.position.y, 50, 50);
+    parametroImg = "inicio";
   }
-  rect(paredeEsquerda.position.x, paredeEsquerda.position.y, 50, 600);
-  rect(paredeDireita.position.x, paredeDireita.position.y, 50, 600);
+
+  if(parametroImg === "inicio")
+  {
+    image(personagemComeco, player.position.x, player.position.y, 50, 50);
+  }
+
+  rect(paredeEsquerda.position.x, paredeEsquerda.position.y, 30, 1000);
+  rect(paredeDireita.position.x, paredeDireita.position.y, 30, 1000);
 
   colisao(paredeEsquerda);
   colisao(paredeDireita);
   movimentacao();
+
+  obstaculoSpikesE.show();
 }
 
 function movimentacao()
@@ -84,10 +105,20 @@ function movimentacao()
 
   if(player.position.y < 550 && direcaoPulo === left && player.position.x < 320)
   {
+    parametroImg = "puloEsquerda";
+  }
+
+  if(parametroImg === "puloEsquerda")
+  {
     image(personagemPulandoEsquerda, player.position.x, player.position.y, 50, 50);
   }
 
-  if(player.position.y < 550 && direcaoPulo === right && player.position.x > 60)
+  if(player.position.y < 550 && direcaoPulo === right && player.position.x > 70)
+  {
+    parametroImg = "puloDireita";
+  }
+
+  if(parametroImg === "puloDireita")
   {
     image(personagemPulandoDireita, player.position.x, player.position.y, 50, 50);
   }
@@ -113,13 +144,22 @@ function colisao(p)
     if(p === paredeEsquerda)
     {
       direcaoPulo = right;
-      image(personagemParedeEsquerda, player.position.x, player.position.y, 50, 50);
+      parametroImg = "direita";
     }
     if(p === paredeDireita)
     {
       direcaoPulo = left;
-      image(personagemParedeDireita, player.position.x, player.position.y, 50, 50);
+      parametroImg = "esquerda";
     }
+  }
+
+  if(parametroImg === "direita")
+  {
+    image(personagemParedeEsquerda, player.position.x, player.position.y, 50, 50);
+  }
+  if(parametroImg === "esquerda")
+  {
+    image(personagemParedeDireita, player.position.x, player.position.y, 50, 50);
   }
 
 }
