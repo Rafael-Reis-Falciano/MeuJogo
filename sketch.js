@@ -13,8 +13,11 @@ var direcaoPulo = right;
 var personagem1, personagem2, personagem3, personagem4, personagem5;
 var parametroImg = "inicio";
 var sawObstacle, laserObstacle, spikesObstacleE, spikesObstacleD;
-var obstaculoSpikesE;
+var obstaculoSpikesE, obstaculoSpikesD, obstaculoLaser, obstaculoSerra;
 var espinhos = [200, 400];
+var lasers = [100, 300];
+var serrasX = [70, 200, 330];
+var serrasY = [50, 200, 350, 450];
 
 function preload()
 {
@@ -46,18 +49,21 @@ function setup()
     frictionAir: 0.05, 
   }
 
-  paredeEsquerda = Bodies.rectangle(0, 0, 30, 1000, static_options);
-  paredeDireita = Bodies.rectangle(370, 0, 30, 1000, static_options);
+  paredeEsquerda = Bodies.rectangle(0, 0, 30, 10000, static_options);
+  paredeDireita = Bodies.rectangle(370, 0, 30, 10000, static_options);
   World.add(world, paredeEsquerda);
   World.add(world, paredeDireita);
 
   solo = Bodies.rectangle(0, 580, 400, 1, static_options);
   World.add(world, solo);
 
-  player = Bodies.rectangle(185, 70, 50, 50, player_options);
+  player = Bodies.rectangle(185, 550, 50, 50, player_options);
   World.add(world, player);
 
   obstaculoSpikesE = new Obstacles(40, Math.round(random(espinhos)), 25, 100, spikesObstacleE);
+  obstaculoSpikesD = new Obstacles(360, Math.round(random(espinhos)), 25, 100, spikesObstacleD);
+  //obstaculoLaser = new Obstacles(200, Math.round(random(lasers)), 500, 30, laserObstacle);
+  obstaculoSerra = new Obstacles(Math.round(random(serrasX)), Math.round(random(serrasY)), 50, 50, sawObstacle);
 
 }
 
@@ -81,14 +87,19 @@ function draw()
     image(personagemComeco, player.position.x, player.position.y, 50, 50);
   }
 
-  rect(paredeEsquerda.position.x, paredeEsquerda.position.y, 30, 1000);
-  rect(paredeDireita.position.x, paredeDireita.position.y, 30, 1000);
+  rect(paredeEsquerda.position.x, paredeEsquerda.position.y, 30, 10000);
+  rect(paredeDireita.position.x, paredeDireita.position.y, 30, 10000);
 
   colisao(paredeEsquerda);
   colisao(paredeDireita);
   movimentacao();
 
+  camera.position.y = player.position.y;
+
   obstaculoSpikesE.show();
+  obstaculoSpikesD.show();
+  //obstaculoLaser.show();
+  obstaculoSerra.show();
 }
 
 function movimentacao()
