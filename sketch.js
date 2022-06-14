@@ -23,7 +23,7 @@ var serrasY = [50, 200, 350, 450];
 
 function preload()
 {
- fundo = loadImage("imagemFundo.jpg");
+ fundo = loadImage("imagem_fundo_nova.png");
  personagemComeco = loadImage("sprite_0.png");
  personagemPulandoDireita = loadImage("sprite_1.png");
  personagemPulandoEsquerda = loadImage("sprite_2.png");
@@ -35,8 +35,8 @@ function preload()
  spikesObstacleD = loadImage("SpikesObstacle2.png");
 }
 
-function setup()
-{
+//function setup()
+//{
   //createCanvas(400, 600);
 
   engine = Engine.create();
@@ -44,14 +44,11 @@ function setup()
   render = Render.create({
     element: document.body,
     engine: engine,
-    options: {},
+    options: {
     width: 400,
     height: 600,
-    wireframes: false,
+    wireframes: false,}
   });
-
-  Engine.run(engine);
-  Render.run(render);
 
   var static_options = {
     isStatic: true,
@@ -73,14 +70,18 @@ function setup()
   player = Bodies.rectangle(185, 550, 50, 50, player_options);
   World.add(world, player);
 
+  Engine.run(engine);
+  Render.run(render);
+
+
   /*obstaculoSpikesE = new Obstacles(40, Math.round(random(espinhos)), 25, 100, spikesObstacleE);
   obstaculoSpikesD = new Obstacles(360, Math.round(random(espinhos)), 25, 100, spikesObstacleD);
-  //obstaculoLaser = new Obstacles(200, Math.round(random(lasers)), 500, 30, laserObstacle);
+  obstaculoLaser = new Obstacles(200, Math.round(random(lasers)), 500, 30, laserObstacle);
   obstaculoSerra = new Obstacles(Math.round(random(serrasX)), Math.round(random(serrasY)), 50, 50, sawObstacle);*/
 
-}
+//}
 
-function draw()
+/*function draw()
 {
   //background("gray");
   //Engine.update(engine);
@@ -103,26 +104,60 @@ function draw()
   //rect(paredeEsquerda.position.x, paredeEsquerda.position.y, 30, 10000);
   //rect(paredeDireita.position.x, paredeDireita.position.y, 30, 10000);
 
-  colisao(paredeEsquerda);
+  /*colisao(paredeEsquerda);
   colisao(paredeDireita);
-  movimentacao();
+  movimentacao();*/
 
   /*camera.position.y = player.position.y;
 
   obstaculoSpikesE.show();
   obstaculoSpikesD.show();
   //obstaculoLaser.show();
-  obstaculoSerra.show();*/
-}
+  obstaculoSerra.show();
+}*/
 
-function movimentacao()
+//function movimentacao()
+//{
+  
+
+  
+
+  /*if(parametroImg === "puloEsquerda")
+  {
+    image(personagemPulandoEsquerda, player.position.x, player.position.y, 50, 50);
+  }*/
+
+  
+
+  /*if(parametroImg === "puloDireita")
+  {
+    image(personagemPulandoDireita, player.position.x, player.position.y, 50, 50);
+  }*/
+//}
+
+//function colisao(p)
+//{
+  
+
+  /*if(parametroImg === "direita")
+  {
+    image(personagemParedeEsquerda, player.position.x, player.position.y, 50, 50);
+  }
+  if(parametroImg === "esquerda")
+  {
+    image(personagemParedeDireita, player.position.x, player.position.y, 50, 50);
+  }*/
+
+//}
+
+function movimento()
 {
-  if(keyDown("space") && direcaoPulo === right)
+  if(direcaoPulo === right)
   {
     Matter.Body.setVelocity(player, {x: 12, y: -10});
   }
 
-  if(keyDown("space") && direcaoPulo === left)
+  if(direcaoPulo === left)
   {
     Matter.Body.setVelocity(player, {x: -12, y: -10});
   }
@@ -132,24 +167,13 @@ function movimentacao()
     parametroImg = "puloEsquerda";
   }
 
-  /*if(parametroImg === "puloEsquerda")
-  {
-    image(personagemPulandoEsquerda, player.position.x, player.position.y, 50, 50);
-  }*/
-
   if(player.position.y < 550 && direcaoPulo === right && player.position.x > 70)
   {
     parametroImg = "puloDireita";
   }
 
-  /*if(parametroImg === "puloDireita")
-  {
-    image(personagemPulandoDireita, player.position.x, player.position.y, 50, 50);
-  }*/
-}
+  ///////////////////////////////////COLISÃO////////////////////////////////////////
 
-function colisao(p)
-{
   var colidir = Matter.SAT.collides(player, p);
 
   if(colidir.collided)
@@ -178,13 +202,10 @@ function colisao(p)
     }
   }
 
-  /*if(parametroImg === "direita")
-  {
-    image(personagemParedeEsquerda, player.position.x, player.position.y, 50, 50);
-  }
-  if(parametroImg === "esquerda")
-  {
-    image(personagemParedeDireita, player.position.x, player.position.y, 50, 50);
-  }*/
-
 }
+
+
+
+
+
+
